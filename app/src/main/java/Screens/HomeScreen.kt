@@ -1,204 +1,217 @@
 package com.example.main.Screens
 
-import Navigation.AppScreens
-import android.annotation.SuppressLint
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.Icons.Default
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Email
-import androidx.compose.material.icons.filled.ExitToApp
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Warning
-import androidx.compose.material3.DrawerState
-import androidx.compose.material3.DrawerValue
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FabPosition
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.ModalDrawerSheet
-import androidx.compose.material3.ModalNavigationDrawer
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.rememberDrawerState
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.currentRecomposeScope
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
+import androidx.compose.material.icons.filled.Chat
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Map
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import androidx.navigation.navOptions
-import com.example.main.CompReusable.ReusableTopAppBar
-import com.example.main.utils.theme.Blue
-import com.example.main.utils.theme.Red
-import com.example.main.utils.theme.White
-import com.example.practica.R
-import kotlinx.coroutines.launch
+import com.example.main.CompReusable.AlertaFlotante
+import com.example.main.CompReusable.NivelAlerta
+import com.example.main.Navigation.AppScreens
+import com.example.main.R
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen (navController: NavController){
+fun HomeScreen(navController: NavController) {
+    var mostrarAlerta by rememberSaveable { mutableStateOf(false) }
+    var hablar by rememberSaveable { mutableStateOf(false) }
 
-    var hablar by remember { mutableStateOf(false) }
-    var drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-    var scope = rememberCoroutineScope()
-    ModalNavigationDrawer(
-        drawerState = drawerState,
-        drawerContent = {
-            ModalDrawerSheet {
-                TextButton(
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = {
-                        navController.navigate(AppScreens.ProfileScreen.name)
-                    }
-                ) {
-                    Row (verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Start,modifier = Modifier.fillMaxWidth(),){
-                        Icon(
-                            imageVector = Icons.Default.Person ,
-                            contentDescription = "boton de perfil",
-                            tint = Color.Black
-                        )
-                        Text("Perfil", modifier = Modifier.padding(horizontal =  5.dp), color = Color.Black)
-                    }
-                }
-                TextButton(
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = {
-                        navController.navigate(AppScreens.ChatScreen.name)
-                    }
-                ) {
-                    Row (verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Start, modifier = Modifier.fillMaxWidth(),){
-                        Icon(
-                            imageVector = Icons.Default.Email ,
-                            contentDescription = "boton de chat",
-                            tint = Color.Black
-                        )
-                        Text("Mensajes", modifier = Modifier.padding(horizontal =  5.dp),color = Color.Black)
-                    }
-                }
-                TextButton(
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = {
-                        navController.navigate(AppScreens.RiskZones.name)
-                    }
-                ) {
-                    Row (verticalAlignment = Alignment.CenterVertically,  horizontalArrangement = Arrangement.Start, modifier = Modifier.fillMaxWidth(),){
-                        Icon(
-                            imageVector = Icons.Default.Warning ,
-                            contentDescription = "boton de zonas de riesgo",
-                            tint = Color.Black
-                        )
-                        Text("Zonas de riesgo", modifier = Modifier.padding(horizontal =  5.dp),color = Color.Black)
-                    }
-                }
-                TextButton(
-
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = {
-                        navController.navigate(AppScreens.LogInScreen.name)
-                    }
-                ) {
-                    Row (verticalAlignment = Alignment.CenterVertically,  horizontalArrangement = Arrangement.Start, modifier = Modifier.fillMaxWidth(),){
-                        Icon(
-                            imageVector = Icons.Default.ExitToApp ,
-                            contentDescription = "cerrar secion",
-                            tint = Color.Red
-                        )
-                        Text("Cerrar sesion", modifier = Modifier.padding(horizontal =  5.dp),
-                            color = Red)
-                    }
-                }
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Sofia Arboleda") }
+            )
+        },
+        floatingActionButton = {
+            ExtendedFloatingActionButton(
+                onClick = {
+                    // Ajusta al nombre exacto de tu ruta si difiere
+                    navController.navigate(AppScreens.AddRiskZone.name)
+                },
+                text = { Text("Agregar zona de riesgo") }
+            )
+        },
+        bottomBar = {
+            NavigationBar {
+                NavigationBarItem(
+                    selected = true, onClick = { /*Inicio*/ },
+                    icon = { Icon(Icons.Default.Home, contentDescription = "Inicio") },
+                    label = { Text("Inicio") }
+                )
+                NavigationBarItem(
+                    selected = false, onClick = { navController.navigate(AppScreens.RiskZones.name) },
+                    icon = { Icon(Icons.Default.Notifications, contentDescription = "Alertas") },
+                    label = { Text("Alertas") }
+                )
+                NavigationBarItem(
+                    selected = false, onClick = { navController.navigate(AppScreens.ChatScreen.name) },
+                    icon = { Icon(Icons.Default.Chat, contentDescription = "Chat") },
+                    label = { Text("Chat") }
+                )
+                NavigationBarItem(
+                    selected = false, onClick = { navController.navigate(AppScreens.ProfileScreen.name) },
+                    icon = { Icon(Icons.Default.Map, contentDescription = "Perfil") },
+                    label = { Text("Perfil") }
+                )
             }
-
         }
-    )
-    {
-        Scaffold(
-            topBar = {
-                ReusableTopAppBar(
-                    title = "Safety First",
-                    icon = Default.Menu,
-                    modifier = Modifier.background(color = Blue).fillMaxWidth(),
-                    onClick = {
+    ) { inner ->
+        Column(
+            modifier = Modifier
+                .padding(inner)
+                .fillMaxSize()
+                .padding(horizontal = 16.dp)
+        ) {
 
-                            scope.launch {
-                                if (drawerState.isClosed) {
-                                    drawerState.open()
-                                } else {
-                                    drawerState.close()
-                                }
-                            }
+            // Encabezado pequeño (actividad y zona)
+            Text(
+                text = "N° Actividad 1012    Zona 3",
+                style = MaterialTheme.typography.labelSmall,
+                modifier = Modifier.padding(top = 8.dp)
+            )
 
-                    },
-                    contentDescription = "Menu",
-                    textAlign = TextAlign.Center,
-                    textStyle = TextStyle(
-                        fontSize = 36.sp,
-                        fontWeight = FontWeight.SemiBold,
+            Spacer(Modifier.height(8.dp))
+
+            // Anuncio del supervisor
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                shape = RoundedCornerShape(16.dp)
+            ) {
+                Column(Modifier.padding(16.dp)) {
+                    Text(
+                        "Anuncio del Supervisor",
+                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
                     )
-                )
-            },
-            floatingActionButton = {
-                FloatingActionButton(
-                    containerColor = Red,
-                    onClick = { navController.navigate(AppScreens.AddZoneRisk.name) }
-                ) {
-                    Icon(
-                        imageVector = Default.Add,
-                        tint = White,
-                        contentDescription = "Agregar zona de riesgo"
+                    Spacer(Modifier.height(4.dp))
+                    Text(
+                        "A partir de ahora todas las zonas implementarán Safety First para la Gestión de Riesgos."
                     )
                 }
             }
-        ) { innerPadding ->
-            Column(
-                modifier = Modifier.padding(innerPadding).fillMaxWidth().fillMaxHeight(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center,
-            ) {
-                Image(
-                    painter = if (!hablar) {
-                        painterResource(R.drawable.boton_rojo_2)
-                    } else {
-                        painterResource(R.drawable.boton_verde)
-                    },
-                    contentDescription = "Boton para hablar",
-                    modifier = Modifier.clickable {
-                        hablar = !hablar
-                    }
-                        .width(315.dp).height(315.dp)
 
+            Spacer(Modifier.height(16.dp))
+
+            Text(
+                "Alertas",
+                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            )
+
+            Spacer(Modifier.height(8.dp))
+
+            // Tarjetas de alerta (simulan las de la imagen)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                AlertaCard(
+                    titulo = "Diego",
+                    descripcion = "Cargas Suspendidas Zona D",
+                    onClick = { mostrarAlerta = true }
+                )
+                AlertaCard(
+                    titulo = "Alejandro",
+                    descripcion = "Riesgo Eléctrico Zona B",
+                    onClick = { mostrarAlerta = true }
                 )
             }
 
+            Spacer(Modifier.height(16.dp))
+
+            Text(
+                "Mapa de la Obra",
+                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            )
+
+            Spacer(Modifier.height(8.dp))
+
+            // Mapa (placeholder). Puedes reemplazar por tu mapa real (Google Maps, etc.)
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(240.dp)
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(MaterialTheme.colorScheme.surfaceVariant)
+                    .clickable { mostrarAlerta = true }, // tocar el mapa también abre alerta
+                contentAlignment = Alignment.Center
+            ) {
+                Text("Mapa (placeholder) — toca para simular alerta")
+            }
+
+            Spacer(Modifier.height(16.dp))
+
+            // Botón grande rojo/verde (según tu recurso actual)
+            Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                Image(
+                    painter = if (!hablar)
+                        painterResource(R.drawable.boton_rojo_2)
+                    else
+                        painterResource(R.drawable.boton_verde),
+                    contentDescription = "Botón de advertencia",
+                    contentScale = ContentScale.Fit,
+                    modifier = Modifier
+                        .width(240.dp)
+                        .height(240.dp)
+                        .clickable {
+                            hablar = !hablar
+                            mostrarAlerta = true
+                        }
+                )
+            }
+        }
+
+        // Alerta flotante tipo modal
+        AlertaFlotante(
+            visible = mostrarAlerta,
+            titulo = "¡ALERTA! Zona con poca luz",
+            descripcion = "¿Desea enviar advertencia de esta zona al supervisor?",
+            nivel = NivelAlerta.ADVERTENCIA,
+            onAdvertirClick = {
+                mostrarAlerta = false
+                navController.navigate(AppScreens.ChatScreen.name) // simula enviar al supervisor
+            },
+            onDismiss = { mostrarAlerta = false }
+        )
+    }
+}
+
+@Composable
+private fun AlertaCard(
+    titulo: String,
+    descripcion: String,
+    onClick: () -> Unit
+) {
+    ElevatedCard(
+        modifier = Modifier
+            .weight(1f)
+            .height(110.dp)
+            .clickable(onClick = onClick),
+        shape = RoundedCornerShape(16.dp)
+    ) {
+
+        Column(
+            modifier = Modifier.padding(12.dp),
+            verticalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(titulo, style = MaterialTheme.typography.labelLarge)
+            Spacer(Modifier.height(4.dp))
+            Text(descripcion, style = MaterialTheme.typography.bodyMedium)
         }
     }
-
 }
