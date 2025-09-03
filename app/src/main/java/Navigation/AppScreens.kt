@@ -11,7 +11,7 @@ enum class AppScreens{
     CodeVerificationScreen,
     ChangePassWordScreen,
     ProfileScreen,
-    UpdateAccount,
+    UpdateAccountScreen,
     ChatScreen,
     RiskZones
 }
