@@ -133,6 +133,7 @@ fun LogInScreen (controller: NavController){
                         fontSize = 12.sp,
                         color = Blue
                     ),
+                    //hola
                     modifier = Modifier
                         .clickable {
                             controller.navigate(AppScreens.SignInScreen.name)
