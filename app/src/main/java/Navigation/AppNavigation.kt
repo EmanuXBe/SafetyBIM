@@ -51,6 +51,9 @@ fun AppNavigation(){
         composable(route = AppScreens.ProfileScreen.name){
             ProfileScreen(navController)
         }
+        composable(route = AppScreens.UpdateAccountScreen.name){
+            EditProfileScreen(onSaveClick = { navController.popBackStack() } )
+            }
         composable(route = AppScreens.ChatScreen.name){
             ChatScreen(navController)
         }
